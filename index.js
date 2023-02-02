@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.send('Lo siento. No puedes estar aquí.')
 })
 
-app.post('/ping', async (req, res, next) => {
+app.put('/ping', async (req, res, next) => {
     try {
         let url = req.body.url
         let cron = req.body.cron
