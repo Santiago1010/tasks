@@ -31,6 +31,25 @@ app.post('/ping', async (req, res, next) => {
     }
 })
 
+app.get('/all/tasks', async (req, res, next) => {
+    try {
+        let tasks = await getAllTasks()
+        return res.status(200).send({ data: tasks })
+    } catch (error) {
+        next(error)
+    }
+})
+
+app.get('/task/:id', async (req, res, next) => {
+    try {
+        let id = req.params.id
+        let task = await getTaskById(id)
+        return res.status(200).send({ data: task })
+    } catch (error) {
+        next(error)
+    }
+})
+
 app.use(logErrors)
 app.use(errorHandler)
 app.use(boomErrorHandler)
@@ -56,11 +75,11 @@ async function scheduleTasks() {
 
     // Por cada tarea
     tasks.forEach(async task => {
-    // Programa la tarea
+        // Programa la tarea
         cron.schedule(task.cron_expression, async () => {
-      // Ejecuta la tarea
-          await runTask(task)
-      })
+            // Ejecuta la tarea
+            await runTask(task)
+        })
     })
 }
 

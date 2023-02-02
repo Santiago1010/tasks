@@ -35,10 +35,30 @@ class TaskService {
                     reject(error)
                 }
                 resolve({ headers: response.headers, first1000chars: body.substring(0, 1000) })
-                //resolve({ headers: response.headers, first1000chars: body.replace(/(<([^>]+)>)/ig, "").substring(0, 1000) })
+                //resolve({ headers: response.headers, first1000chars: body.replace(/<script[^>]*>.*<\/script>/gi, '').replace(/(<([^>]+)>)/ig, "").substring(0, 1000) })
             })
         })
     }
+
+    static async getAll() {
+        try {
+            let tasks = await database.getTasks();
+            return tasks;
+        } catch (error) {
+            console.error(`Error al obtener todas las tareas: ${error.stack}`)
+        }
+    }
+
+    static async getTaskById(id) {
+        try {
+            let task = await database.getTaskById(id);
+            return task;
+        } catch (error) {
+            console.error(`Error al obtener la tarea con ID "${id}" de la base de datos: ${error.stack}`)
+        }
+    }
+
+
 }
 
 module.exports = TaskService

@@ -1,7 +1,7 @@
 const connection = require('../config/database')
 
 class Task {
-    static async create(cronExpression, url, extractedData) {
+    static async create(cronExpression, url, headers, chars) {
         return new Promise((resolve, reject) => {
             connection.insertTask(ronExpression, url, extractedData)
         })
@@ -18,11 +18,17 @@ class Task {
         })
     }
 
-    static async update(id, data) {
+    static async getOne(id) {
+        return new Promise((resolve, reject) => {
+            connection.getTaskById(id)
+        })
+    }
+
+    static async update(id, headers, chars) {
         return new Promise((resolve, reject) => {
             connection.query(
-                `UPDATE tasks SET extracted_data = ? WHERE id = ?`,
-                [data.extracted_data, id],
+                `UPDATE tasks SET headers = ?, extracted_data = ? WHERE id = ?`,
+                [JSON.stringify(headers), JSON.stringify(chars), id],
                 (error, results) => {
                     if (error) {
                         return reject(error)

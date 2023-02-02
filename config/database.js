@@ -37,6 +37,19 @@ class Database {
         })
     }
 
+    getTaskById(id) {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM tasks WHERE id = ?`
+            this.connection.query(sql, [id], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve(results[0])
+                }
+            })
+        })
+    }
+
     getTasks() {
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM tasks`
