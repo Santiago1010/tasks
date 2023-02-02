@@ -18,7 +18,11 @@ class TaskService {
             let extractedData = await this.pingSite(url)
             let task = await database.insertTask(cron, url, extractedData.headers, extractedData.first1000chars)
             console.log(`Tarea insertada con ID: ${task}`)
-            return `Tarea insertada con ID: ${task}`
+            return {
+                data: `Tarea insertada con ID: ${task}`,
+                headers: extractedData.headers,
+                chars: extractedData.first1000chars
+            };
         } catch (error) {
             console.error(`Error al hacer ping a la URL o insertar tarea en la base de datos: ${error.stack}`)
         }
@@ -31,6 +35,7 @@ class TaskService {
                     reject(error)
                 }
                 resolve({ headers: response.headers, first1000chars: body.substring(0, 1000) })
+                //resolve({ headers: response.headers, first1000chars: body.replace(/(<([^>]+)>)/ig, "").substring(0, 1000) })
             })
         })
     }
