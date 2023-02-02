@@ -26,16 +26,7 @@ class Task {
 
     static async update(id, headers, chars) {
         return new Promise((resolve, reject) => {
-            connection.query(
-                `UPDATE tasks SET headers = ?, extracted_data = ? WHERE id = ?`,
-                [JSON.stringify(headers), JSON.stringify(chars), id],
-                (error, results) => {
-                    if (error) {
-                        return reject(error)
-                    }
-                    return resolve(results)
-                }
-            )
+            connection.updateTask(JSON.stringify(headers), JSON.stringify(chars), id)
         })
     }
 }
