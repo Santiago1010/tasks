@@ -1,5 +1,4 @@
 const cron = require('node-cron')
-const TasksModel = require('./models/task.model')
 const TasksService = require('./services/task.service')
 const express = require('express')
 const exphbs = require('express-handlebars');
@@ -33,7 +32,7 @@ app.post('/ping', async (req, res, next) => {
 
 app.get('/all/tasks', async (req, res, next) => {
     try {
-        let tasks = await getAllTasks()
+        let tasks = await TasksService.getAll()
         return res.status(200).send({ data: tasks })
     } catch (error) {
         next(error)
@@ -43,7 +42,7 @@ app.get('/all/tasks', async (req, res, next) => {
 app.get('/task/:id', async (req, res, next) => {
     try {
         let id = req.params.id
-        let task = await getTaskById(id)
+        let task = await TasksService.getTaskById(id)
         return res.status(200).send({ data: task })
     } catch (error) {
         next(error)
@@ -56,7 +55,7 @@ app.use(boomErrorHandler)
 
 // Obtiene todas las tareas programadas
 async function getAllTasks() {
-    return await TasksModel.getAll()
+    return await TasksService.getAll()
 }
 
 // Ejecuta una tarea
@@ -65,7 +64,7 @@ async function runTask(task) {
     let response = await TasksService.pingSite(task.url)
 
     // Actualiza la tarea con la respuesta del ping
-    await TasksModel.update(task.id, { extracted_data: response })
+    await TasksService.updateTask(task.id, { extracted_data: response })
 }
 
 // Programa todas las tareas

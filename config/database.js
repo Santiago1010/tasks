@@ -66,7 +66,7 @@ class Database {
     updateTask(id, headers, chars) {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE tasks SET headers = ?, extracted_data = ? WHERE id = ?`
-            this.connection.query(sql, [JSON.stringify(headers), JSON.stringify(chars)], (error, results) => {
+            this.connection.query(sql, [JSON.stringify(headers), JSON.stringify(chars), id], (error, results) => {
                 if (error) {
                     reject(error)
                 } else {

@@ -58,6 +58,14 @@ class TaskService {
         }
     }
 
+    static async updateTask(id, headers, chars) {
+        try {
+            let task = await database.updateTask(id, headers, chars);
+            return task;
+        } catch (error) {
+            console.error(`Error al actualizar la tarea: ${error.stack}`)
+        }
+    }
 
 }
 
