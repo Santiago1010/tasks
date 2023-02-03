@@ -64,7 +64,7 @@ async function runTask(task) {
     let response = await TasksService.pingSite(task.url)
 
     // Actualiza la tarea con la respuesta del ping
-    await TasksService.updateTask(task.id, { headers: response.headers, extracted_data: response.first1000chars })
+    await TasksService.updateTask(task.id, response.headers, response.first1000chars)
 }
 
 // Programa todas las tareas
