@@ -64,7 +64,7 @@ async function runTask(task) {
     let response = await TasksService.pingSite(task.url)
 
     // Actualiza la tarea con la respuesta del ping
-    await TasksService.updateTask(task.id, { extracted_data: response })
+    await TasksService.updateTask(task.id, { headers: response.headers, extracted_data: response.first1000chars })
 }
 
 // Programa todas las tareas
@@ -73,13 +73,13 @@ async function scheduleTasks() {
     let tasks = await getAllTasks()
 
     // Por cada tarea
-    tasks.forEach(async task => {
+    await Promise.all(tasks.map(task => {
         // Programa la tarea
         cron.schedule(task.cron_expression, async () => {
             // Ejecuta la tarea
             await runTask(task)
         })
-    })
+    })) 
 }
 
 // Inicia la programación de las tareas

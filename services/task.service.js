@@ -17,7 +17,6 @@ class TaskService {
 
             let extractedData = await this.pingSite(url)
             let task = await database.insertTask(cron, url, extractedData.headers, extractedData.first1000chars)
-            console.log(`Tarea insertada con ID: ${task}`)
             return {
                 data: `Tarea insertada con ID: ${task}`,
                 headers: extractedData.headers,
